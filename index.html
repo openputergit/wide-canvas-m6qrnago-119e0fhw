@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarRent - Premium Car Rental Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<style>
+    body { font-family: 'Poppins', sans-serif; }
+    .car-card:hover { transform: translateY(-5px); }
+    .overlay { display: none; }
+    .active { display: block; }
+</style>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-600">CarRent</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="showPage('home')" class="text-gray-700 hover:text-blue-600">Home</button>
+                    <button onclick="showPage('login')" class="text-gray-700 hover:text-blue-600">Login</button>
+                    <button onclick="showPage('register')" class="text-gray-700 hover:text-blue-600">Register</button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700"><i class="bi bi-list text-2xl"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="login" class="overlay min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">Email</label>
+                    <input type="email" required class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-gray-700">Password</label>
+                    <input type="password" required class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="register" class="overlay min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96">
+            <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">Full Name</label>
+                    <input type="text" required class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-gray-700">Email</label>
+                    <input type="email" required class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-gray-700">Password</label>
+                    <input type="password" required class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home" class="overlay active">
+        <!-- Categories -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6">Categories</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <button onclick="filterCars('sports')" class="p-4 bg-white rounded-lg shadow hover:shadow-lg text-center">
+                    <i class="bi bi-car-front text-2xl text-blue-600"></i>
+                    <p class="mt-2">Sports Cars</p>
+                </button>
+                <button onclick="filterCars('suv')" class="p-4 bg-white rounded-lg shadow hover:shadow-lg text-center">
+                    <i class="bi bi-truck text-2xl text-blue-600"></i>
+                    <p class="mt-2">SUVs</p>
+                </button>
+                <button onclick="filterCars('luxury')" class="p-4 bg-white rounded-lg shadow hover:shadow-lg text-center">
+                    <i class="bi bi-car-front-fill text-2xl text-blue-600"></i>
+                    <p class="mt-2">Luxury</p>
+                </button>
+                <button onclick="filterCars('family')" class="p-4 bg-white rounded-lg shadow hover:shadow-lg text-center">
+                    <i class="bi bi-people text-2xl text-blue-600"></i>
+                    <p class="mt-2">Family</p>
+                </button>
+                <button onclick="filterCars('electric')" class="p-4 bg-white rounded-lg shadow hover:shadow-lg text-center">
+                    <i class="bi bi-lightning-charge text-2xl text-blue-600"></i>
+                    <p class="mt-2">Electric</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cars Grid -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6">Available Cars</h2>
+            <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Cars will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Car Details Modal -->
+    <div id="carModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="carModalTitle" class="text-2xl font-bold"></h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div id="carModalContent" class="space-y-4">
+                <!-- Car details will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample car data
+        const cars = [
+            { id: 1, name: "Tesla Model S", category: "electric", price: 200, image: "https://source.unsplash.com/800x600/?tesla", details: "Range: 405 miles, 0-60 mph: 1.99s, Top Speed: 200 mph" },
+            { id: 2, name: "Porsche 911", category: "sports", price: 300, image: "https://source.unsplash.com/800x600/?porsche", details: "Engine: 3.0L Twin-Turbo, Power: 443 HP, 0-60 mph: 3.5s" },
+            { id: 3, name: "BMW X7", category: "suv", price: 250, image: "https://source.unsplash.com/800x600/?bmw-suv", details: "Seating: 7, Engine: 3.0L I6, Cargo Space: 90.4 cu ft" },
+            { id: 4, name: "Mercedes S-Class", category: "luxury", price: 400, image: "https://source.unsplash.com/800x600/?mercedes", details: "Engine: 4.0L V8, Power: 496 HP, Luxury Features: Premium Sound System" },
+            { id: 5, name: "Honda Odyssey", category: "family", price: 150, image: "https://source.unsplash.com/800x600/?minivan", details: "Seating: 8, Safety: 5-Star Rating, Features: Entertainment System" },
+            { id: 6, name: "Audi e-tron", category: "electric", price: 220, image: "https://source.unsplash.com/800x600/?audi", details: "Range: 222 miles, Charging: DC Fast Charging, Power: 402 HP" }
+        ];
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.overlay').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Filter cars by category
+        function filterCars(category) {
+            const filteredCars = category ? cars.filter(car => car.category === category) : cars;
+            displayCars(filteredCars);
+        }
+
+        // Display cars in grid
+        function displayCars(carsToShow) {
+            const grid = document.getElementById('carsGrid');
+            grid.innerHTML = carsToShow.map(car => `
+                <div class="car-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <img src="${car.image}" alt="${car.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold">${car.name}</h3>
+                        <p class="text-gray-600">$${car.price}/day</p>
+                        <button onclick="showCarDetails(${car.id})" class="mt-4 w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show car details modal
+        function showCarDetails(carId) {
+            const car = cars.find(c => c.id === carId);
+            document.getElementById('carModal').classList.remove('hidden');
+            document.getElementById('carModalTitle').textContent = car.name;
+            document.getElementById('carModalContent').innerHTML = `
+                <img src="${car.image}" alt="${car.name}" class="w-full h-64 object-cover rounded">
+                <p class="text-xl font-bold">$${car.price}/day</p>
+                <p class="text-gray-700">${car.details}</p>
+                <button onclick="rentCar(${car.id})" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+                    Rent Now
+                </button>
+            `;
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('carModal').classList.add('hidden');
+        }
+
+        // Rent car function
+        function rentCar(carId) {
+            alert('Please login to rent this car.');
+            showPage('login');
+            closeModal();
+        }
+
+        // Form submissions
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Login successful!');
+            showPage('home');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Registration successful! Please login.');
+            showPage('login');
+        });
+
+        // Initialize page
+        displayCars(cars);
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
